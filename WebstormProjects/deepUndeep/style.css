@@ -1,0 +1,35 @@
+.d1{
+    background: red;
+    height: 600px;
+    width: 900px;
+}
+.d2{
+   background: blue;
+    height: 500px;
+    width: 700px;
+}
+.d3{
+    background: olivedrab;
+    height: 400px;
+    width: 500px;
+}
+.d4{
+    background: lightslategrey;
+    height: 400px;
+    width: 300px;
+}
+.d5{
+    background: yellowgreen;
+    height: 100px;
+    width: 200px;
+}
+.d6{
+    background: #000;
+    height: 100px;
+    width: 200px;
+}
+.d7{
+    background: rgba(95, 194, 95, 0.85);
+    height: 400px;
+    width: 300px;
+}

@@ -1,0 +1,8 @@
+<application>
+  <component name="FileTypeManager" version="13">
+    <extensionMap>
+      <mapping pattern="anu" type="PLAIN_TEXT" />
+      <mapping pattern="nu" type="PLAIN_TEXT" />
+    </extensionMap>
+  </component>
+</application>
