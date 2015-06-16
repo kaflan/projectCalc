@@ -82,6 +82,7 @@ window.addEventListener('load', function onLoad() {
   }
   function createGame() {
     createGameButton.disabled = true;
+    statusMEssage1.textContent = 'Ожидаем начала игры';
     request1 = new XMLHttpRequest();
     request1.open('POST', gameUrls.newGame);
     request1.send();
@@ -96,6 +97,9 @@ window.addEventListener('load', function onLoad() {
         }
       }
     });
+    request3 = new XMLHttpRequest();
+    request3.open('POST', gameUrls.gameReady);
+    request3.setRequestHeader(yourid,playerId);
   }
 
   function surrender(e) {
