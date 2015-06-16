@@ -72,7 +72,6 @@ window.addEventListener('load', function onLoad() {
         mainGameDiv.style.display = 'block';
         startGameDiv.style.display = 'none';
         Player = JSON.parse(resp.target.responseText).side;
-        console.log(Player);
         addCells(10);
       }
       if (resp.target.status === 410) {
@@ -81,66 +80,40 @@ window.addEventListener('load', function onLoad() {
       statusMEssage1.innerHTML = 'Неизвестная ошибка старта игры';
     });
   }
-
   function createGame() {
-    try {
-      createGameButton.disabled = true;
-      request1 = new XMLHttpRequest();
-      request1.open('POST', gameUrls.newGame);
-      request1.send();
-      request1.addEventListener('readystatechange', function getResponse(resp) {
-        try {
-          if (resp.target.readyState === resp.target.DONE) {
-            if (resp.target.status === 200) {
-              yourid = JSON.parse(resp.target.responseText).yourId;
-              w1.send(JSON.stringify({register: yourid}));
-            }
-          }
-        }
-        catch (err) {
+    createGameButton.disabled = true;
+    request1 = new XMLHttpRequest();
+    request1.open('POST', gameUrls.newGame);
+    request1.send();
+    request1.addEventListener('readystatechange', function getResponse(resp) {
+      if (resp.target.readyState === 4) {
+        if (resp.target.status === 200) {
+          yourid = JSON.parse(resp.target.responseText).yourId;
+          w1.send(JSON.stringify({register: yourid}));
+        } else {
           createGameButton.disabled = false;
-          statusMEssage1.innerHTML = "Ошибка создания игры";
+          statusMEssage1.innerHTML = 'Ошибка создания игры';
         }
-      });
-    }
-    catch (err) {
-      createGameButton.disabled = false;
-      statusMEssage1.innerHTML = "Ошибка создания игры";
-    }
+      }
+    });
   }
 
   function surrender(e) {
     request3 = new XMLHttpRequest();
     request3.open('PUT', gameUrls.surrender);
+    request3.setRequestHeader();
     request3.send();
     request3.addEventListener('reabystatechenge', function getRes(resp) {
       if (resp.target.readyState === resp.target.DONE && resp.target.status === 200) {
         mainGameDiv.style.display = 'none';
         startGameDiv.style.display = 'block';
+        console.log('ok!');
       }
+      console.log(' not ok!');
       statusMEssage1.innerHTML = 'Неизвестная ошибка';
     });
   }
 
-  w1.addEventListener('message', function wsMessage(e) {
-    response = JSON.parse(e.data);
-    if (response.action === 'add') {
-      addToUl(createLiElem(response.id));
-    }
-    if (response.action === 'remove') {
-      removeFromUl(response.id);
-    }
-    if (response.action === 'startGame') {
-      playerId = response.id;
-      console.log('startgame:  this' + playerId);
-      startGame(playerId);
-    }
-    if (response.error === 'message') {
-      sendError();
-    }
-  });
-
-  createGameButton.addEventListener('click', createGame);
   function clickAction(event) {
     if (event.target.classList.contains('cell')) {
       if (event.target.classList.contains('x') ||
@@ -165,6 +138,26 @@ window.addEventListener('load', function onLoad() {
       event.target.classList.add('o');
     }
   }
+  w1.addEventListener('message', function wsMessage(e) {
+    response = JSON.parse(e.data);
+    if (response.action === 'add') {
+      addToUl(createLiElem(response.id));
+    }
+    if (response.action === 'remove') {
+      removeFromUl(response.id);
+    }
+    if (response.action === 'startGame') {
+      playerId = response.id;
+      console.log('startgame:  this' + playerId);
+      startGame(playerId);
+    }
+    if (response.error === 'message') {
+      sendError();
+    }
+  });
+
+  createGameButton.addEventListener('click', createGame);
+
 
   newGameButton.addEventListener('click', surrender);
   field.addEventListener('click', clickAction);
